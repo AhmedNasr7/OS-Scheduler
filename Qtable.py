@@ -8,23 +8,15 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
 from Processes import Ui_Processes
 
+Ui_MainWindow,_ = loadUiType(path.join(path.dirname(__file__), "Processes.ui"))
 
-
-class Table(QMainWindow):
+class Table(QMainWindow, Ui_MainWindow):
 
     def __init__(self, parent= None):
         super(Table, self).__init__(parent)
         QMainWindow.__init__(self)
-        self.ui = Ui_Processes()
-        self.ui.setupUi(self)
-        self.setup_Ui()
-
-    def setup_Ui(self):
-        '''
-        UI setup goes here
-        '''
-        self.setWindowTitle("OS Scheduler")
-        self.setFixedSize(900,600)
+        # self.ui = Ui_Processes()
+        self.setupUi(self)
 
     def accept(self):
         print("Hello")
