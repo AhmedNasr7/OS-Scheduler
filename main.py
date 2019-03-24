@@ -33,9 +33,6 @@ class MainApp(QMainWindow, Ui_MainWindow):
         self.algorithmsMenu.addItem("  Priority")
         self.algorithmsMenu.addItem("  Round Robin")
         self.algorithmsMenu.activated[str].connect(self.onActivation)
-        #self.vlayout.addWidget(self.algorithmsMenu)
-        #self.setLayout(self.vlayout)
-
         
 
 
@@ -52,7 +49,7 @@ class MainApp(QMainWindow, Ui_MainWindow):
     def onActivation(self, algo):
         # on picking an algorithm from the menu
 
-        if (algo == '  Priority'): # Dynamically showing preemptive/Non Preemptive checkboxes
+        if (algo == '  Priority'): # Dynamically showing preemptive/Non Preemptive checkboxes.
             self.preemptiveCheckBox = QCheckBox(' Preemptive ', self)
             self.nonPreemptiveCheckBox = QCheckBox(' Non Preemptive ', self)
             self.layout().addWidget(self.preemptiveCheckBox)
@@ -64,8 +61,9 @@ class MainApp(QMainWindow, Ui_MainWindow):
 
             self.preemptiveCheckBox.stateChanged.connect(self.preemptive_stateChanged)
             self.nonPreemptiveCheckBox.stateChanged.connect(self.nonPreemptive_stateChanged)
+
         else:
-            if self.preemptiveCheckBox is not None:
+            if self.preemptiveCheckBox is not None: # if checkboxes exist, delete it.
                 self.preemptiveCheckBox.deleteLater()
                 self.nonPreemptiveCheckBox.deleteLater()
             else:

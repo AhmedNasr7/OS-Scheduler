@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>628</width>
-    <height>425</height>
+    <width>801</width>
+    <height>594</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -21,7 +21,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QTableWidget" name="Table">
+    <widget class="QTableWidget" name="table">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>1</horstretch>
@@ -30,8 +30,8 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>328</width>
-       <height>0</height>
+       <width>500</width>
+       <height>400</height>
       </size>
      </property>
      <row>
@@ -86,12 +86,12 @@
      </row>
      <column>
       <property name="text">
-       <string>Burst Time</string>
+       <string>Processes</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Processes</string>
+       <string>Burst Time</string>
       </property>
      </column>
      <column>
@@ -99,58 +99,15 @@
        <string>Arrival Time</string>
       </property>
      </column>
-     <item row="9" column="0">
+     <item row="9" column="1">
       <property name="text">
        <string/>
       </property>
      </item>
     </widget>
    </item>
-   <item>
-    <widget class="QDialogButtonBox" name="ok">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>ok</sender>
-   <signal>accepted()</signal>
-   <receiver>Processes</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ok</sender>
-   <signal>rejected()</signal>
-   <receiver>Processes</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
