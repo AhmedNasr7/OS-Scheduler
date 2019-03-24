@@ -11,9 +11,7 @@ from PyQt5.QtGui import QIcon
 
 
 
-
 FORM_CLASS,_ = loadUiType(path.join(path.dirname(__file__), "main.ui"))
-
 
 
 class MainApp(QMainWindow, FORM_CLASS):
