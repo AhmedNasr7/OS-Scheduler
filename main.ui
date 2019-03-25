@@ -37,7 +37,7 @@
      <string>Choose an Algorithm</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="add_processesBtn">
     <property name="geometry">
      <rect>
       <x>540</x>
@@ -47,7 +47,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Run Scheduler</string>
+     <string>Add Processes</string>
     </property>
    </widget>
    <widget class="QListWidget" name="listWidget">
