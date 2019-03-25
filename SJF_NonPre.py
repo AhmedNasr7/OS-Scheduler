@@ -20,7 +20,7 @@ def AverageTime(processes, n):
         total_wt = total_wt + wt[i]  
         total_tat = total_tat + tat[i]  
         print(" ", processes[i][0], "\t\t",  processes[i][1], "\t\t",  wt[i], "\t\t", tat[i]) 
-    print("\nAverage waiting time = %.3f "%(total_wt /n) ) 
+    print("\nAverage waiting time = %.6f "%(total_wt /n) ) 
     print("Average turn around time = ", (total_tat) / n)  
   
 
