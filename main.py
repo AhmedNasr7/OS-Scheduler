@@ -5,7 +5,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSizePolicy, QMessageBox, QWidget, \
     QPushButton, QCheckBox
 from PyQt5.QtGui import QIcon
-from Qtable import *
+from processesTable import *
 
 
 Ui_MainWindow,_ = loadUiType(path.join(path.dirname(__file__), "main.ui"))
@@ -19,10 +19,11 @@ class MainApp(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.window_width = 900
         self.window_height = 600
-        self.setup_Ui()
         self.init_Buttons()
 
-        self.processes_table = Table()
+        self.setup_Ui()
+
+        
 
 
     def setup_Ui(self):
@@ -38,6 +39,12 @@ class MainApp(QMainWindow, Ui_MainWindow):
         self.algorithmsMenu.addItem("  Round Robin")
         self.init_checkBoxes()
         self.algorithmsMenu.activated[str].connect(self.onActivation)
+        if (str(self.algorithmsMenu.currentText()) == '  Priority'):
+            self.priorityPicked = True
+        else:
+            self.priorityPicked = False
+
+
         
 
 
@@ -66,12 +73,13 @@ class MainApp(QMainWindow, Ui_MainWindow):
       
         self.preemptiveCheckBox.move(310, 90)
         self.nonPreemptiveCheckBox.move(310, 120)
-        self.preemptiveCheckBox.resize(350, 40)
-        self.nonPreemptiveCheckBox.resize(350, 40)
+        self.preemptiveCheckBox.resize(150, 40)
+        self.nonPreemptiveCheckBox.resize(150, 40)
         self.preemptiveCheckBox.stateChanged.connect(self.preemptive_stateChanged)
         self.nonPreemptiveCheckBox.stateChanged.connect(self.nonPreemptive_stateChanged)
         self.preemptiveCheckBox.setVisible(False)
         self.nonPreemptiveCheckBox.setVisible(False)
+        self.preemptiveCheckBox.setChecked(True)
 
     def onActivation(self, algo):
         # on picking an algorithm from the menu
@@ -81,18 +89,25 @@ class MainApp(QMainWindow, Ui_MainWindow):
             if (algo == '  Priority'): #  showing preemptive/Non Preemptive checkboxes.
                self.preemptiveCheckBox.setVisible(True)
                self.nonPreemptiveCheckBox.setVisible(True)
+               self.priorityPicked = True
 
             else:
                 self.preemptiveCheckBox.setVisible(False)
                 self.nonPreemptiveCheckBox.setVisible(False)
+                self.priorityPicked = False
+
 
                 
         except Exception as e:
             print(e)
+
+        #self.add_processesBtn.clicked.connect(self.add_processes)
                 
 
 
     def add_processes(self):
+
+        self.processes_table = Table(self.priorityPicked)
         self.processes_table.show()
 
 
