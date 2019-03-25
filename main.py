@@ -5,6 +5,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSizePolicy, QMessageBox, QWidget, \
     QPushButton, QCheckBox
 from PyQt5.QtGui import QIcon
+from Qtable import *
 
 
 Ui_MainWindow,_ = loadUiType(path.join(path.dirname(__file__), "main.ui"))
@@ -18,13 +19,14 @@ class MainApp(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setup_Ui()
         self.init_Buttons()
-        #self.preemptiveCheckBox = QCheckBox(' Preemptive ', self)
+        self.processes_entry = Table()
 
 
     def setup_Ui(self):
         '''
         UI setup goes here
         '''
+        self.center_window()
         self.setWindowTitle("OS Scheduler")
         self.setFixedSize(900,600)
         #self.vlayout = QVBoxLayout()
@@ -36,6 +38,14 @@ class MainApp(QMainWindow, Ui_MainWindow):
         
 
 
+
+
+    def center_window(self):
+        # centering window
+        qtRectangle = self.frameGeometry()
+        centerPoint = QDesktopWidget().availableGeometry().center()
+        qtRectangle.moveCenter(centerPoint)
+        self.move(qtRectangle.topLeft())
         
 
 
@@ -43,7 +53,7 @@ class MainApp(QMainWindow, Ui_MainWindow):
         '''
         Buttons initializations goes here
         '''
-        pass
+        self.add_processesBtn.clicked.connect(self.add_processes)
 
 
     def onActivation(self, algo):
@@ -71,7 +81,8 @@ class MainApp(QMainWindow, Ui_MainWindow):
             
 
 
-
+    def add_processes(self):
+        self.processes_entry.show()
 
 
     
@@ -91,11 +102,13 @@ class MainApp(QMainWindow, Ui_MainWindow):
         else:
             self.preemptiveCheckBox.setChecked(1)
 
-        
 
 
-            
-            
+
+
+
+
+
 
 def main():
     app = QApplication(sys.argv)

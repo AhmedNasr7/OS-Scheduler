@@ -4,7 +4,7 @@ from os import path
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSizePolicy, QMessageBox, QWidget, \
-    QPushButton, QCheckBox
+    QPushButton, QCheckBox, QGridLayout, QDesktopWidget
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
 
@@ -31,7 +31,7 @@ class Table(QMainWindow, Ui_MainWindow):
         '''
         UI setup goes here
         '''
-
+        self.center_window()
         self.setWindowTitle("OS Scheduler")
         self.setFixedSize(800,600)
         self.table.move(0, 0)
@@ -41,9 +41,9 @@ class Table(QMainWindow, Ui_MainWindow):
         for i in range(self.columns_count):
              self.table.setColumnWidth(i, self.table_width/3 - 10)
         
-        self.enterButton = QPushButton('Enter Processes', self)
-        self.enterButton.resize(150, 40)
-        self.enterButton.move(620, 50)
+        self.runButton = QPushButton('Run Scheduler', self)
+        self.runButton.resize(150, 40)
+        self.runButton.move(620, 50)
         self.add_newRow = QPushButton("Add New Row", self)
         self.add_newRow.resize(150, 40)
         self.add_newRow.move(620, 100)
@@ -58,16 +58,24 @@ class Table(QMainWindow, Ui_MainWindow):
 
 
     def init_Button(self):
-        self.enterButton.clicked.connect(self.onClick_enterButton)
-        self.add_newRow.clicked.connect(self.addRow)
+        self.runButton.clicked.connect(self.onClick_runButton)
+        self.add_newRow.clicked.connect(self.add_row)
         self.cancelButton.clicked.connect(self.onClick_cancelButton)
 
 
+    def center_window(self):
+         # centering window
+        qtRectangle = self.frameGeometry()
+        centerPoint = QDesktopWidget().availableGeometry().center()
+        qtRectangle.moveCenter(centerPoint)
+        self.move(qtRectangle.topLeft())
 
-    def onClick_enterButton(self):
+
+    def onClick_runButton(self):
         pass
 
-    def addRow(self):
+
+    def add_row(self):
         self.rows_count += 1
         if self.table_height < 34 * self.rows_count:
             self.table_height += 34
@@ -77,31 +85,10 @@ class Table(QMainWindow, Ui_MainWindow):
 
     
     def onClick_cancelButton(self):
-        pass
+
+         self.close()
 
 
 
 
-    
-    '''
-    def accept(self):
-        print("Hello")
-    
-    def reject(self):
-        print("World")
-    '''
-        
-
-def main():
-    app = QApplication(sys.argv)
-    window = Table()
-    window.show()
-
-    sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    main()
-
-
-
+  
