@@ -17,9 +17,12 @@ class MainApp(QMainWindow, Ui_MainWindow):
         super(MainApp, self).__init__(parent)
         QMainWindow.__init__(self)
         self.setupUi(self)
+        self.window_width = 900
+        self.window_height = 600
         self.setup_Ui()
         self.init_Buttons()
-        self.processes_entry = Table()
+
+        self.processes_table = Table()
 
 
     def setup_Ui(self):
@@ -28,12 +31,12 @@ class MainApp(QMainWindow, Ui_MainWindow):
         '''
         self.center_window()
         self.setWindowTitle("OS Scheduler")
-        self.setFixedSize(900,600)
-        #self.vlayout = QVBoxLayout()
+        self.setFixedSize(self.window_width,self.window_height)
         self.algorithmsMenu.addItem("  First Come First Serve")
         self.algorithmsMenu.addItem("  Shortest Job First")
         self.algorithmsMenu.addItem("  Priority")
         self.algorithmsMenu.addItem("  Round Robin")
+        self.init_checkBoxes()
         self.algorithmsMenu.activated[str].connect(self.onActivation)
         
 
@@ -56,51 +59,60 @@ class MainApp(QMainWindow, Ui_MainWindow):
         self.add_processesBtn.clicked.connect(self.add_processes)
 
 
+    def init_checkBoxes(self):
+
+        self.preemptiveCheckBox = QCheckBox(' Preemptive ', self)
+        self.nonPreemptiveCheckBox = QCheckBox(' Non Preemptive ', self)
+      
+        self.preemptiveCheckBox.move(310, 90)
+        self.nonPreemptiveCheckBox.move(310, 120)
+        self.preemptiveCheckBox.resize(350, 40)
+        self.nonPreemptiveCheckBox.resize(350, 40)
+        self.preemptiveCheckBox.stateChanged.connect(self.preemptive_stateChanged)
+        self.nonPreemptiveCheckBox.stateChanged.connect(self.nonPreemptive_stateChanged)
+        self.preemptiveCheckBox.setVisible(False)
+        self.nonPreemptiveCheckBox.setVisible(False)
+
     def onActivation(self, algo):
         # on picking an algorithm from the menu
 
-        if (algo == '  Priority'): # Dynamically showing preemptive/Non Preemptive checkboxes.
-            self.preemptiveCheckBox = QCheckBox(' Preemptive ', self)
-            self.nonPreemptiveCheckBox = QCheckBox(' Non Preemptive ', self)
-            self.layout().addWidget(self.preemptiveCheckBox)
-            self.layout().addWidget(self.nonPreemptiveCheckBox)
-            self.preemptiveCheckBox.move(310, 90)
-            self.nonPreemptiveCheckBox.move(310, 120)
-            self.preemptiveCheckBox.resize(350, 40)
-            self.nonPreemptiveCheckBox.resize(350, 40)
+        try:
 
-            self.preemptiveCheckBox.stateChanged.connect(self.preemptive_stateChanged)
-            self.nonPreemptiveCheckBox.stateChanged.connect(self.nonPreemptive_stateChanged)
+            if (algo == '  Priority'): #  showing preemptive/Non Preemptive checkboxes.
+               self.preemptiveCheckBox.setVisible(True)
+               self.nonPreemptiveCheckBox.setVisible(True)
 
-        else:
-            if self.preemptiveCheckBox is not None: # if checkboxes exist, delete it.
-                self.preemptiveCheckBox.deleteLater()
-                self.nonPreemptiveCheckBox.deleteLater()
             else:
-                pass
-            
+                self.preemptiveCheckBox.setVisible(False)
+                self.nonPreemptiveCheckBox.setVisible(False)
+
+                
+        except Exception as e:
+            print(e)
+                
 
 
     def add_processes(self):
-        self.processes_entry.show()
+        self.processes_table.show()
 
 
-    
+        
     def preemptive_stateChanged(self, state):
         
-        if self.preemptiveCheckBox.isChecked():
+        if state == QtCore.Qt.Checked:
             self.nonPreemptiveCheckBox.setChecked(0)
             # do other stuff
         else:
             self.nonPreemptiveCheckBox.setChecked(1)
-       
-
+        
+    
     def nonPreemptive_stateChanged(self, state):
-        if self.nonPreemptiveCheckBox.isChecked():
+        if state == QtCore.Qt.Checked:
             self.preemptiveCheckBox.setChecked(0)
             # do other stuff
         else:
             self.preemptiveCheckBox.setChecked(1)
+
 
 
 
