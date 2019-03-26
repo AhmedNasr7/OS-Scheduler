@@ -18,6 +18,7 @@ def FCFS(Processes):
 def SJF(Processes):
     pass
 
+
 def Priority(self, Processes, preemptive = False):
 
     OrderedProcesses = {}
@@ -71,11 +72,44 @@ def Priority(self, Processes, preemptive = False):
                         
         return OrderedProcesses, AvgWaitingTime
 
-def round_robin():
-    pass
+def round_robin(processes, q):
+    output = []
+    processes.sort(key=lambda x: x[1]) # sorting processes by its arrival time.
+    processes_cpy = processes
+    t = 0
+    while(len(processes_cpy) > 0):
+       
+        i = 0
+        for p in processes:
+            l = []
+            if p[2] < q and p[2] > 0:
+                t += p[2]
+                l = [p[0], t]
+            elif p[2] <= 0:
+                processes_cpy.pop(i)
+            else:
+                t += q
+                l = [p[0], t]
+
+            p[2] = p[2] - q
+            if len(l) > 0:
+                output.append(l)
+            
+            i += 1
+            
+    return output
+
+
+                
+
+
+    
 
 def main():
-    print(FCFS(np.array([1,5,1,2,5,0,3,5,0]).reshape(-1,3)))
+    #print(FCFS(np.array([1,5,1,2,5,0,3,5,0]).reshape(-1,3)))
+    processes = [[0, 1, 5], [1, 2, 3], [2, 3, 20], [7, 0, 10]]
+    print(round_robin(processes, 4))
+    
 
 if __name__ == '__main__':
     main()
