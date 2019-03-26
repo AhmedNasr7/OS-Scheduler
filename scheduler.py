@@ -9,7 +9,8 @@ def SJF(Processes, preemptive = False):
     Processes = np.insert(Processes, 2, Processes[:,1], axis=1)
     return Priority(Processes, preemptive)
 
-def Priority(Processes, preemptive = False):
+
+def Priority(self, Processes, preemptive = False):
 
     OrderedProcesses = []
     AvgWaitingTime = 0
@@ -103,14 +104,41 @@ def Priority(Processes, preemptive = False):
                 Processes[i-count:i+1,] = Processes[Processes[i-count:i+1,2].argsort()]
                         
         return OrderedProcesses, AvgWaitingTime
-
-def round_robin(Processes, preemptive = False):
-    pass
     
 
-def main():
+def roundRobin(processes, q):
+    output = []
+    processes.sort(key=lambda x: x[1]) # sorting processes by its arrival time.
+    processes_cpy = processes
+    t = 0
+    while(len(processes_cpy) > 0):
+       
+        i = 0
+        for p in processes:
+            l = []
+            if p[2] < q and p[2] > 0:
+                t += p[2]
+                l = [p[0], t]
+            elif p[2] <= 0:
+                processes_cpy.pop(i)
+            else:
+                t += q
+                l = [p[0], t]
 
+            p[2] = p[2] - q
+            if len(l) > 0:
+                output.append(l)
+            
+            i += 1
+            
+    return output    
+
+def main():
+    #print(FCFS(np.array([1,5,1,2,5,0,3,5,0]).reshape(-1,3)))
+    processes = [[0, 1, 5], [1, 2, 3], [2, 3, 20], [7, 0, 10]]
+    # print(roundRobin(processes, 4))
     print(Priority(np.array([1,5,1,0,2,5,0,1,3,5,0,2,4,4,0,3]).reshape(-1,4), True))
+    
 
 if __name__ == '__main__':
     main()
