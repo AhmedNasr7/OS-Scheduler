@@ -1,26 +1,17 @@
 import numpy as np
 
 def FCFS(Processes):
-    Processes = Processes[Processes[:,2].argsort()]
-    OrderedProcesses = {}
-    AvgWaitingTime = 0
-    Time = 0
-    NumOfProcesses = Processes.shape[0]
-
-    for i in range(0, NumOfProcesses):
-        AvgWaitingTime += (Time - Processes[i,2]) / NumOfProcesses
-        OrderedProcesses[Processes[i,0]] = Time
-        Time += Processes[i,1]
-
-    return OrderedProcesses, AvgWaitingTime
+    Processes = np.insert(Processes, 2, Processes[:,2], axis=1)
+    return Priority(Processes)
 
 
-def SJF(Processes):
-    pass
+def SJF(Processes, preemptive = False):
+    Processes = np.insert(Processes, 2, Processes[:,1], axis=1)
+    return Priority(Processes, preemptive)
 
-def Priority(self, Processes, preemptive = False):
+def Priority(Processes, preemptive = False):
 
-    OrderedProcesses = {}
+    OrderedProcesses = []
     AvgWaitingTime = 0
     NumOfProcesses = Processes.shape[0]
 
@@ -37,7 +28,49 @@ def Priority(self, Processes, preemptive = False):
             break
 
     if (preemptive):
-        pass
+        Time = 0
+        # Every finished process recalculates the arranging of the rest of the processes 
+        # based on Priority and time of Arrival
+        while(True):
+            # Average time is the time every process spent in the queue meaned across all processes
+            # Avg = Start time of this process - Arrival Time / Num of Processes
+            AvgWaitingTime += float(Time - Processes[0,3]) / NumOfProcesses
+
+
+            for i in range(0, Processes.shape[0] - 2):
+
+                if (Processes[i, 3] > Processes[0,3] and Processes[i, 2] > Processes[0,2] and Processes[0,1] >= Processes[i, 3]):
+                    if (Processes[0,1] - Processes[i, 3]):
+                        # Time taken after the present process finished
+                        Time += Processes[0,1] - Processes[i, 3]
+                        OrderedProcesses.append([Processes[0,0], Time])
+                        Processes[0,1] = Processes[0,1] - (Processes[i,3] - Processes[0,3])
+                        Processes = np.insert(Processes,0,Processes[i,]).reshape(-1,4)
+                    else:
+                        Time += Processes[0,1]
+                        # Poping finished processes from the queue
+                        OrderedProcesses.append([Processes[0,0], Time])
+                        Processes = np.delete(Processes,0,0)
+                        i -= 1
+                
+                else: 
+                    Time += Processes[0,1]
+                    # Poping finished processes from the queue
+                    OrderedProcesses.append([Processes[0,0], Time])
+                    Processes = np.delete(Processes,0,0)
+                    i -= 1
+                
+                
+                if(Processes.shape[0] == 0):
+                    break
+
+            
+            if(Processes.shape[0] == 0):
+                break
+
+                                    
+        return OrderedProcesses, AvgWaitingTime
+
 
     else:
         Time = 0
@@ -46,13 +79,13 @@ def Priority(self, Processes, preemptive = False):
         while(True):
             # Average time is the time every process spent in the queue meaned across all processes
             # Avg = Start time of this process - Arrival Time / Num of Processes
-            AvgWaitingTime += (Time - Processes[0,3]) / NumOfProcesses
+            AvgWaitingTime += float(Time - Processes[0,3]) / NumOfProcesses
             
             # Time Reashed after the present process finished
             Time += Processes[0,1]
             
             # Poping finished processes from the queue
-            OrderedProcesses[Processes[0,0]] = Time
+            OrderedProcesses.append([Processes[0,0], Time])
             Processes = np.delete(Processes,0,0)
             
             if(Processes.size == 0):
@@ -71,11 +104,13 @@ def Priority(self, Processes, preemptive = False):
                         
         return OrderedProcesses, AvgWaitingTime
 
-def round_robin():
+def round_robin(Processes, preemptive = False):
     pass
+    
 
 def main():
-    print(FCFS(np.array([1,5,1,2,5,0,3,5,0]).reshape(-1,3)))
+
+    print(Priority(np.array([1,5,1,0,2,5,0,1,3,5,0,2,4,4,0,3]).reshape(-1,4), True))
 
 if __name__ == '__main__':
     main()
