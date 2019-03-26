@@ -4,7 +4,7 @@ from os import path
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSizePolicy, QMessageBox, QWidget, \
-    QPushButton, QCheckBox, QGridLayout, QDesktopWidget, QTableWidget,QTableWidgetItem
+    QPushButton, QCheckBox, QGridLayout, QDesktopWidget, QTableWidget, QTableWidgetItem
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
 
@@ -71,6 +71,11 @@ class Table(QMainWindow):
     
         self.table.setHorizontalHeaderLabels(columnsLabels)
 
+        for i in range (self.rows_count):
+            self.table.setItem(i, 0, QTableWidgetItem("P" + str(i)))
+
+
+
     
 
     def init_Button(self):
@@ -99,6 +104,8 @@ class Table(QMainWindow):
             
         self.table.setFixedSize(self.table_width, self.table_height)
         self.table.setRowCount(self.rows_count)
+        self.table.setItem(self.rows_count - 1, 0, QTableWidgetItem("P" + str(self.rows_count - 1)))
+
 
     def delete_row(self):
         self.rows_count -= 1

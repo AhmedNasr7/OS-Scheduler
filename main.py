@@ -3,25 +3,25 @@ import sys
 from os import path
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSizePolicy, QMessageBox, QWidget, \
-    QPushButton, QCheckBox, QLabel, QLineEdit
+    QPushButton, QCheckBox, QLabel, QLineEdit, QComboBox
 from PyQt5.QtGui import QIcon
 from processesTable import *
 
 
-Ui_MainWindow,_ = loadUiType(path.join(path.dirname(__file__), "main.ui"))
+#Ui_MainWindow,_ = loadUiType(path.join(path.dirname(__file__), "main.ui"))
 
 
-class MainApp(QMainWindow, Ui_MainWindow):
+class MainApp(QMainWindow):
 
     def __init__(self, parent= None):
         super(MainApp, self).__init__(parent)
         QMainWindow.__init__(self)
-        self.setupUi(self)
+        #self.setupUi(self)
         self.window_width = 900
         self.window_height = 600
+        self.setup_Ui()
         self.init_Buttons()
 
-        self.setup_Ui()
 
         
 
@@ -33,10 +33,19 @@ class MainApp(QMainWindow, Ui_MainWindow):
         self.center_window()
         self.setWindowTitle("OS Scheduler")
         self.setFixedSize(self.window_width,self.window_height)
+        self.algorithmsMenu = QComboBox(self)
+        self.algorithmsMenu.move(30, 100)
+        self.algorithmsMenu.resize(210, 40)
         self.algorithmsMenu.addItem("  First Come First Serve")
         self.algorithmsMenu.addItem("  Shortest Job First")
         self.algorithmsMenu.addItem("  Priority")
         self.algorithmsMenu.addItem("  Round Robin")
+        self.add_processesBtn = QPushButton('Add Processes', self)
+        self.add_processesBtn.move(540, 100)
+        self.add_processesBtn.resize(130, 40)
+        self.algorithmsMenuLabel = QLabel('Choose Algorithm', self)
+        self.algorithmsMenuLabel.move(30, 60)
+        self.algorithmsMenuLabel.resize(200, 30)
         self.init_optionsWidgets()
         self.algorithmsMenu.activated[str].connect(self.algorithmMenu_onActivation)
         if (str(self.algorithmsMenu.currentText()) == '  Priority'):
