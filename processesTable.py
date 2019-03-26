@@ -17,11 +17,12 @@ class Table(QMainWindow):
         QMainWindow.__init__(self)
         #self.setupUi(self)
         self.columns_count = 3
-        self.rows_count = 5
+        self.rows_count = 4
         self.table_width = 600
         self.table_height = self.rows_count * 34
         self.setup_Ui(priority)
         self.init_Button()
+        self.processes = []
     
        
 
@@ -50,8 +51,6 @@ class Table(QMainWindow):
         
         
 
-        #self.table.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
-        #self.table.resizeColumnsToContents
 
     def create_table(self, priority):
         if(priority): 
@@ -94,7 +93,21 @@ class Table(QMainWindow):
 
 
     def onClick_runButton(self):
-        pass
+        self.parse_tableData()
+        print(self.processes)
+
+
+    def parse_tableData(self):
+        
+        for i in range(self.rows_count):
+            try: 
+                burst = int(self.table.takeItem(i, 1).text())
+                arrival = int(self.table.takeItem(i, 2).text())
+                process = [i, burst, arrival]
+                self.processes.append(process)
+            except Exception as e:
+                pass
+
 
 
     def add_row(self):

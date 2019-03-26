@@ -72,7 +72,7 @@ def Priority(self, Processes, preemptive = False):
                         
         return OrderedProcesses, AvgWaitingTime
 
-def round_robin(processes, q):
+def roundRobin(processes, q):
     output = []
     processes.sort(key=lambda x: x[1]) # sorting processes by its arrival time.
     processes_cpy = processes
@@ -108,7 +108,7 @@ def round_robin(processes, q):
 def main():
     #print(FCFS(np.array([1,5,1,2,5,0,3,5,0]).reshape(-1,3)))
     processes = [[0, 1, 5], [1, 2, 3], [2, 3, 20], [7, 0, 10]]
-    print(round_robin(processes, 4))
+    print(roundRobin(processes, 4))
     
 
 if __name__ == '__main__':
