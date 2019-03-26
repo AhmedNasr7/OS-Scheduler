@@ -1,4 +1,4 @@
-
+"""witout arrival time"""
 def WaitingTime(processes, n, wt):
     wt[0] = 0; 
     for i in range(1,n): 
@@ -17,19 +17,14 @@ def AverageTime(processes, n):
     total_tat = 0
     for i in range(n): 
         total_wt = total_wt + wt[i]  
-        total_tat = total_tat + tat[i]   
-	return(total_wt /n)
-  # return (total_tat / n)  
-    
-    
+        total_tat = total_tat + tat[i]  
+    return(total_wt /n)  
+  
+
+
 if __name__ =="__main__":
     
-    proc = [[1,10], [2,4], [3, 2], [4, 8]] 
+    proc = [[1,6], [2,8], [3, 7], [4, 3]] 
     n = len(proc)
     proc.sort(key=lambda x: x[1])
-    print("Order in which process gets executed :")
-    for i in range (n):
-         print(proc[i][0],end=' ' )
-    print()
     AverageTime(proc, n)
-    
