@@ -3,7 +3,7 @@ import sys
 from os import path
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSizePolicy, QMessageBox, QWidget, \
-    QPushButton, QCheckBox
+    QPushButton, QCheckBox, QLabel, QLineEdit
 from PyQt5.QtGui import QIcon
 from processesTable import *
 
@@ -37,15 +37,13 @@ class MainApp(QMainWindow, Ui_MainWindow):
         self.algorithmsMenu.addItem("  Shortest Job First")
         self.algorithmsMenu.addItem("  Priority")
         self.algorithmsMenu.addItem("  Round Robin")
-        self.init_checkBoxes()
-        self.algorithmsMenu.activated[str].connect(self.onActivation)
+        self.init_optionsWidgets()
+        self.algorithmsMenu.activated[str].connect(self.algorithmMenu_onActivation)
         if (str(self.algorithmsMenu.currentText()) == '  Priority'):
             self.priorityPicked = True
         else:
             self.priorityPicked = False
 
-
-        
 
 
 
@@ -66,7 +64,9 @@ class MainApp(QMainWindow, Ui_MainWindow):
         self.add_processesBtn.clicked.connect(self.add_processes)
 
 
-    def init_checkBoxes(self):
+    def init_optionsWidgets(self):
+
+        # Creating Preemption checkboxes:
 
         self.preemptiveCheckBox = QCheckBox(' Preemptive ', self)
         self.nonPreemptiveCheckBox = QCheckBox(' Non Preemptive ', self)
@@ -81,7 +81,23 @@ class MainApp(QMainWindow, Ui_MainWindow):
         self.nonPreemptiveCheckBox.setVisible(False)
         self.preemptiveCheckBox.setChecked(True)
 
-    def onActivation(self, algo):
+        # creating Quantum Time Options
+        self.QtimeLabel = QLabel('Enter Quantum Time', self)
+        self.QtimeLabel.move(310, 70)
+        self.QtimeLabel.resize(200, 40)
+        self.QtimeEdit = QLineEdit(self)
+        self.QtimeEdit.move(310, 110)
+        self.QtimeEdit.resize(100, 40)
+        self.QtimeEdit.setVisible(0)
+        self.QtimeLabel.setVisible(0)
+        
+
+
+
+        
+        
+
+    def algorithmMenu_onActivation(self, algo):
         # on picking an algorithm from the menu
 
         try:
@@ -90,12 +106,22 @@ class MainApp(QMainWindow, Ui_MainWindow):
                self.preemptiveCheckBox.setVisible(True)
                self.nonPreemptiveCheckBox.setVisible(True)
                self.priorityPicked = True
+               self.QtimeEdit.setVisible(0)
+               self.QtimeLabel.setVisible(0)
 
             else:
                 self.preemptiveCheckBox.setVisible(False)
                 self.nonPreemptiveCheckBox.setVisible(False)
                 self.priorityPicked = False
+                if(algo == "  Round Robin"):
+                    self.QtimeEdit.setVisible(1)
+                    self.QtimeLabel.setVisible(1)
+                else:
+                    self.QtimeEdit.setVisible(0)
+                    self.QtimeLabel.setVisible(0)
 
+
+            
 
                 
         except Exception as e:
