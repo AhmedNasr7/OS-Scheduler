@@ -1,8 +1,10 @@
 from PyQt5.uic import loadUiType
 import sys
 from os import path
-from PyQt5 import QtCore
-from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSizePolicy, QMessageBox, QWidget, \
     QPushButton, QCheckBox, QGridLayout, QDesktopWidget, QTableWidget, QTableWidgetItem
 from PyQt5.QtGui import QIcon
@@ -10,7 +12,12 @@ from PyQt5.QtCore import pyqtSlot
 
 #Ui_MainWindow,_ = loadUiType(path.join(path.dirname(__file__), "Processes.ui"))
 
+
+
 class Table(QMainWindow):
+
+    procAdded = pyqtSignal()
+
 
     def __init__(self, priority, parent= None):
         super(Table, self).__init__(parent)
@@ -36,9 +43,9 @@ class Table(QMainWindow):
         self.setWindowTitle("OS Scheduler")
         self.setFixedSize(800,600)
         self.create_table(priority)
-        self.runButton = QPushButton('Run Scheduler', self)
-        self.runButton.resize(150, 40)
-        self.runButton.move(620, 50)
+        self.okayBtn = QPushButton('Okay', self)
+        self.okayBtn.resize(150, 40)
+        self.okayBtn.move(620, 50)
         self.add_newRow = QPushButton("Add New Row", self)
         self.add_newRow.resize(150, 40)
         self.add_newRow.move(620, 100)
@@ -78,7 +85,7 @@ class Table(QMainWindow):
     
 
     def init_Button(self):
-        self.runButton.clicked.connect(self.onClick_runButton)
+        self.okayBtn.clicked.connect(self.onClick_okay)
         self.add_newRow.clicked.connect(self.add_row)
         self.cancelButton.clicked.connect(self.onClick_cancelButton)
         self.deleteRowBtn.clicked.connect(self.delete_row)
@@ -92,13 +99,17 @@ class Table(QMainWindow):
         self.move(qtRectangle.topLeft())
 
 
-    def onClick_runButton(self):
+    def onClick_okay(self):
         self.parse_tableData()
-        print(self.processes)
+        if len(self.processes) > 0:
+            self.procAdded.emit()
+            self.close()
+
 
 
     def parse_tableData(self):
         
+        # to be edited
         for i in range(self.rows_count):
             try: 
                 burst = int(self.table.takeItem(i, 1).text())
@@ -127,6 +138,9 @@ class Table(QMainWindow):
         self.table.setFixedSize(self.table_width, self.table_height)
 
     
+    def get_processes(self):
+        return self.processes
+
     def onClick_cancelButton(self):
 
          self.close()

@@ -2,11 +2,16 @@ from PyQt5.uic import loadUiType
 import sys
 from os import path
 from PyQt5 import QtCore
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSizePolicy, QMessageBox, QWidget, \
     QPushButton, QCheckBox, QLabel, QLineEdit, QComboBox
 from PyQt5.QtGui import QIcon
 from processesTable import *
 from chart import *
+from scheduler import *
 
 #Ui_MainWindow,_ = loadUiType(path.join(path.dirname(__file__), "main.ui"))
 
@@ -21,6 +26,7 @@ class MainApp(QMainWindow):
         self.window_height = 1000
         self.setup_Ui()
         self.init_Buttons()
+        self.proc_Gantt = []
 
 
         
@@ -41,34 +47,44 @@ class MainApp(QMainWindow):
         self.algorithmsMenu.addItem("  Priority")
         self.algorithmsMenu.addItem("  Round Robin")
         self.add_processesBtn = QPushButton('Add Processes', self)
-        self.add_processesBtn.move(540, 70)
+        self.add_processesBtn.move(640, 70)
         self.add_processesBtn.resize(130, 40)
+
+        self.runBtn = QPushButton('Run Scheduler', self)
+        self.runBtn.move(800, 70)
+        self.runBtn.resize(130, 40)
+        self.runBtn.setEnabled(0)
+
+        self.waitingTimeLabel = QLabel('Waiting Time: ', self)
+        self.waitingTimeLabel.move(450, 70)
+        self.waitingTimeLabel.resize(150, 40)
+        self.waitingTimeLabel.setVisible(0)
+
         self.algorithmsMenuLabel = QLabel('Choose Algorithm', self)
         self.algorithmsMenuLabel.move(30, 30)
         self.algorithmsMenuLabel.resize(200, 30)
         self.init_optionsWidgets()
+
         self.algorithmsMenu.activated[str].connect(self.algorithmMenu_onActivation)
         if (str(self.algorithmsMenu.currentText()) == '  Priority'):
             self.priorityPicked = True
         else:
             self.priorityPicked = False
         
+        # GANTT Chart
+
         self.chart = PlotCanvas()
         self.layout().addWidget(self.chart)
         self.chart.move(20, 120)
         self.chart.resize(900, 600)
-        self.chart.setVisible(1)
+        self.chart.setVisible(0)
 
         p = [[3, 4], [0, 8], [1, 11], [2, 15], [3, 18], [0, 19], [2, 23], [2, 25]]
 
-        self.chart.plot(p)
+        #self.chart.plot(p)
 
     
         
-
-
-
-
 
     def center_window(self):
         # centering window
@@ -84,6 +100,8 @@ class MainApp(QMainWindow):
         Buttons initializations goes here
         '''
         self.add_processesBtn.clicked.connect(self.add_processes)
+        self.runBtn.clicked.connect(self.run)
+
 
 
     def init_optionsWidgets(self):
@@ -93,8 +111,8 @@ class MainApp(QMainWindow):
         self.preemptiveCheckBox = QCheckBox(' Preemptive ', self)
         self.nonPreemptiveCheckBox = QCheckBox(' Non Preemptive ', self)
       
-        self.preemptiveCheckBox.move(310, 90)
-        self.nonPreemptiveCheckBox.move(310, 120)
+        self.preemptiveCheckBox.move(290, 55)
+        self.nonPreemptiveCheckBox.move(290, 85)
         self.preemptiveCheckBox.resize(150, 40)
         self.nonPreemptiveCheckBox.resize(150, 40)
         self.preemptiveCheckBox.stateChanged.connect(self.preemptive_stateChanged)
@@ -105,10 +123,10 @@ class MainApp(QMainWindow):
 
         # creating Quantum Time Options
         self.QtimeLabel = QLabel('Enter Quantum Time', self)
-        self.QtimeLabel.move(310, 70)
+        self.QtimeLabel.move(310, 30)
         self.QtimeLabel.resize(200, 40)
         self.QtimeEdit = QLineEdit(self)
-        self.QtimeEdit.move(310, 110)
+        self.QtimeEdit.move(310, 70)
         self.QtimeEdit.resize(100, 40)
         self.QtimeEdit.setVisible(0)
         self.QtimeLabel.setVisible(0)
@@ -124,7 +142,7 @@ class MainApp(QMainWindow):
 
         try:
 
-            if (algo == '  Priority'): #  showing preemptive/Non Preemptive checkboxes.
+            if (algo == '  Priority' or algo == "  Shortest Job First"): #  showing preemptive/Non Preemptive checkboxes.
                self.preemptiveCheckBox.setVisible(True)
                self.nonPreemptiveCheckBox.setVisible(True)
                self.priorityPicked = True
@@ -157,6 +175,9 @@ class MainApp(QMainWindow):
 
         self.processes_table = Table(self.priorityPicked)
         self.processes_table.show()
+        self.processes_table.procAdded.connect(self.processAdded)
+        self.chart.setVisible(0)
+
 
 
         
@@ -176,7 +197,50 @@ class MainApp(QMainWindow):
         else:
             self.preemptiveCheckBox.setChecked(1)
 
+    def processAdded(self):
+        self.processes = self.processes_table.get_processes()
+        print(self.processes)
+        self.runBtn.setEnabled(1)
+    
+    def run(self):
 
+        # run the corresponding algo
+        if (str(self.algorithmsMenu.currentText()) == "  First Come First Serve"):
+            self.proc_Gantt, self.waiting_time = FCFS(self.processes)
+        
+        elif (str(self.algorithmsMenu.currentText()) == '  Priority'):
+            
+            if self.preemptiveCheckBox.isChecked:
+                self.proc_Gantt, self.waiting_time = Priority(self.processes, True)
+            else:
+                self.proc_Gantt, self.waiting_time = Priority(self.processes, False)
+
+        
+        elif (str(self.algorithmsMenu.currentText()) == "  Shortest Job First"):
+
+            if self.preemptiveCheckBox.isChecked:
+                self.proc_Gantt, self.waiting_time = SJF(self.processes, True)
+            else:
+                self.proc_Gantt, self.waiting_time = SJF(self.processes, False)
+        
+        elif (str(self.algorithmsMenu.currentText()) == "  Round Robin"):
+            q = self.QtimeEdit.text()
+            self.proc_Gantt, self.waiting_time = roundRobin(self.processes, int(q))
+        
+        else: 
+            pass
+
+        
+        self.chart.plot(self.proc_Gantt)
+        self.chart.setVisible(1)
+
+    
+
+        
+
+        
+       
+        
 
 
 

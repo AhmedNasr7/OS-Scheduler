@@ -10,7 +10,7 @@ def SJF(Processes, preemptive = False):
     return Priority(Processes, preemptive)
 
 
-def Priority(self, Processes, preemptive = False):
+def Priority(Processes, preemptive = False):
 
     OrderedProcesses = []
     AvgWaitingTime = 0
@@ -130,8 +130,10 @@ def roundRobin(processes, q):
                 output.append(l)
             
             i += 1
+
+    print(output)
             
-    return output    
+    return output
 
 def main():
     #print(FCFS(np.array([1,5,1,2,5,0,3,5,0]).reshape(-1,3)))
