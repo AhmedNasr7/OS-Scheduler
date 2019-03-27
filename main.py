@@ -17,8 +17,8 @@ class MainApp(QMainWindow):
         super(MainApp, self).__init__(parent)
         QMainWindow.__init__(self)
         #self.setupUi(self)
-        self.window_width = 900
-        self.window_height = 600
+        self.window_width = 1100
+        self.window_height = 1000
         self.setup_Ui()
         self.init_Buttons()
 
@@ -34,17 +34,17 @@ class MainApp(QMainWindow):
         self.setWindowTitle("OS Scheduler")
         self.setFixedSize(self.window_width,self.window_height)
         self.algorithmsMenu = QComboBox(self)
-        self.algorithmsMenu.move(30, 100)
+        self.algorithmsMenu.move(30, 70)
         self.algorithmsMenu.resize(210, 40)
         self.algorithmsMenu.addItem("  First Come First Serve")
         self.algorithmsMenu.addItem("  Shortest Job First")
         self.algorithmsMenu.addItem("  Priority")
         self.algorithmsMenu.addItem("  Round Robin")
         self.add_processesBtn = QPushButton('Add Processes', self)
-        self.add_processesBtn.move(540, 100)
+        self.add_processesBtn.move(540, 70)
         self.add_processesBtn.resize(130, 40)
         self.algorithmsMenuLabel = QLabel('Choose Algorithm', self)
-        self.algorithmsMenuLabel.move(30, 60)
+        self.algorithmsMenuLabel.move(30, 30)
         self.algorithmsMenuLabel.resize(200, 30)
         self.init_optionsWidgets()
         self.algorithmsMenu.activated[str].connect(self.algorithmMenu_onActivation)
@@ -55,8 +55,14 @@ class MainApp(QMainWindow):
         
         self.chart = PlotCanvas()
         self.layout().addWidget(self.chart)
-        self.chart.move(40, 160)
-        self.chart.resize(800, 400)
+        self.chart.move(20, 120)
+        self.chart.resize(900, 600)
+        self.chart.setVisible(1)
+
+        p = [[3, 4], [0, 8], [1, 11], [2, 15], [3, 18], [0, 19], [2, 23], [2, 25]]
+
+        self.chart.plot(p)
+
     
         
 

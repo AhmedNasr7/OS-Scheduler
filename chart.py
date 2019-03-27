@@ -27,20 +27,22 @@ class PlotCanvas(FigureCanvas):
         self.pNames = []
         self.start = []
         self.end = []
-        p = [[3, 4], [0, 8], [1, 11], [2, 15], [3, 18], [0, 19], [2, 23], [2, 25]]
+
+       
+
+
+    def plot(self, p):
 
         self.processData(p)
-        self.plot()
-
-
-    def plot(self):
 
         self.ax.set_yticks(self.pNums)
 
         # Set ticks labels for x-axis
-        self.ax.set_yticklabels(self.y_ticks_labels, rotation='vertical', fontsize=18)
-        self.ax.hlines(self.pNums, self.start, self.end, colors="blue", lw=20)
+        self.ax.set_yticklabels(self.y_ticks_labels, rotation='horizontal', fontsize=9)
+        self.ax.hlines(self.pNums, self.start, self.end, colors="blue", lw=10)
         self.ax.margins(0.1)
+        self.ax.set_xticks(range(self.end[len(self.end) - 1] + 2))
+        self.ax.set_xticklabels(range(self.end[len(self.end) - 1] + 2), rotation='vertical', fontsize=9)
         plt.show(self.ax)
             
 
@@ -54,7 +56,7 @@ class PlotCanvas(FigureCanvas):
         self.start = [0]
         
         for l in processes:
-            self.y_ticks_labels.append('P ' + str(l[0]))
+            self.y_ticks_labels.append('Process ' + str(l[0]))
             self.pNums.append(l[0])
             self.start.append(l[1])
             self.end.append(l[1])
