@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSize
     QPushButton, QCheckBox, QLabel, QLineEdit, QComboBox
 from PyQt5.QtGui import QIcon
 from processesTable import *
-
+from chart import *
 
 #Ui_MainWindow,_ = loadUiType(path.join(path.dirname(__file__), "main.ui"))
 
@@ -52,6 +52,13 @@ class MainApp(QMainWindow):
             self.priorityPicked = True
         else:
             self.priorityPicked = False
+        
+        self.chart = PlotCanvas()
+        self.layout().addWidget(self.chart)
+        self.chart.move(40, 160)
+        self.chart.resize(800, 400)
+    
+        
 
 
 
@@ -162,8 +169,6 @@ class MainApp(QMainWindow):
             # do other stuff
         else:
             self.preemptiveCheckBox.setChecked(1)
-
-
 
 
 

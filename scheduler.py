@@ -135,9 +135,9 @@ def roundRobin(processes, q):
 
 def main():
     #print(FCFS(np.array([1,5,1,2,5,0,3,5,0]).reshape(-1,3)))
-    processes = [[0, 1, 5], [1, 2, 3], [2, 3, 20], [7, 0, 10]]
-    # print(roundRobin(processes, 4))
-    print(Priority(np.array([1,5,1,0,2,5,0,1,3,5,0,2,4,4,0,3]).reshape(-1,4), True))
+    processes = [[0, 1, 5], [1, 2, 3], [2, 3, 10], [7, 0, 7]]
+    print(roundRobin(processes, 4))
+    #print(Priority(np.array([1,5,1,0,2,5,0,1,3,5,0,2,4,4,0,3]).reshape(-1,4), True))
     
 
 if __name__ == '__main__':
