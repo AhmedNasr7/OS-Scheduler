@@ -29,7 +29,7 @@ def Priority(Processes, preemptive = False):
             break
 
     if (preemptive):
-        Time = 0
+        Time = Processes[0,3]
         # Every finished process recalculates the arranging of the rest of the processes 
         # based on Priority and time of Arrival
         while(True):
@@ -53,15 +53,16 @@ def Priority(Processes, preemptive = False):
                         break
 
                     elif (Processes[i,3] == (Time + Processes[0,1])):
-
+                        
                         Time += Processes[0,1]
                         OrderedProcesses.append([Processes[0,0], Time])
                         Processes = np.delete(Processes,0,0)
-                        Processes = np.insert(Processes,0,Processes[i,]).reshape(-1,4)
+                        Processes = np.insert(Processes,0,Processes[i-1,]).reshape(-1,4)
                         Processes = np.delete(Processes,i+1,0)
                         break
 
                     else:
+                        print(Processes)
                         if (Processes[i,3] > Time):
                             Processes[0,1] -= Processes[i,3] - Time
                             Time = Processes[i,3]
@@ -69,17 +70,15 @@ def Priority(Processes, preemptive = False):
                             Processes = np.insert(Processes,0,Processes[i,]).reshape(-1,4)
                             Processes = np.delete(Processes,i+1,0)
                             break
+                        
                         else:
-                            
                             Processes = np.insert(Processes,0,Processes[i,]).reshape(-1,4)
                             Processes = np.delete(Processes,i+1,0)
                             break
-
-                            
-                        
             
             if(Flag and Processes.shape[0] != 0):
                 continue
+            
             else:
                 
                 Time += Processes[0,1]
@@ -95,7 +94,7 @@ def Priority(Processes, preemptive = False):
 
 
     else:
-        Time = 0
+        Time = Processes[0,3]
         # Every finished process recalculates the arranging of the rest of the processes 
         # based on Priority and time of Arrival
         while(True):
@@ -127,38 +126,37 @@ def Priority(Processes, preemptive = False):
         return OrderedProcesses, AvgWaitingTime
     
 
-def roundRobin(processes, q):
-    output = []
-    processes.sort(key=lambda x: x[1]) # sorting processes by its arrival time.
-    processes_cpy = processes
-    t = 0
-    while(len(processes_cpy) > 0):
-       
-        i = 0
-        for p in processes:
-            l = []
-            if p[2] < q and p[2] > 0:
-                t += p[2]
-                l = [p[0], t]
-            elif p[2] <= 0:
-                processes_cpy.pop(i)
-            else:
-                t += q
-                l = [p[0], t]
+def RoundRobin(Processes, q):
 
-            p[2] = p[2] - q
-            if len(l) > 0:
-                output.append(l)
-            
-            i += 1
-            
-    return output    
+    OrderedProcesses = []
+    AvgWaitingTime = 0
+    NumOfProcesses = Processes.shape[0]
+
+    Processes = Processes[Processes[:,2].argsort()]
+    Time = Processes[0,2]
+
+
+    for process in Processes:
+        AvgWaitingTime += float(Time - Processes[0,2]) / NumOfProcesses
+        NumOfiterations = int(process[1]/q)
+        RemainderTime = process[1] % q
+        for i in range(NumOfiterations):
+            Time += q
+            OrderedProcesses.append([process[0], Time])
+        if(RemainderTime):
+            Time += RemainderTime
+            OrderedProcesses.append([process[0], Time])
+        else:
+            continue
+
+    return OrderedProcesses, AvgWaitingTime
+
 
 def main():
     #print(FCFS(np.array([1,5,1,2,5,0,3,5,0]).reshape(-1,3)))
-    processes = [[0, 1, 5], [1, 2, 3], [2, 3, 20], [7, 0, 10]]
-    # print(roundRobin(processes, 4))
-    print(Priority(np.array([1,5,1,0,2,5,1,1,3,5,1,2,4,4,1,3,5,5,0,20]).reshape(-1,4), True))
+    processes = [[0, 1, 0], [1, 6, 3], [2, 3, 20], [7, 0, 10]]
+    print(RoundRobin(np.array(processes), 4))
+    # print(Priority(np.array([1,5,1,0,2,5,1,2,3,5,1,3,4,4,1,4,5,5,0,20]).reshape(-1,4), True))
     
 
 if __name__ == '__main__':
