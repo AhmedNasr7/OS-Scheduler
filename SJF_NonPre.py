@@ -13,15 +13,18 @@ def AverageTime(processes, n):
     tat = [0] * n  
     WaitingTime(processes, n, wt)  
     TurnAroundTime(processes, n, wt, tat)  
+    print("Processes    Duration Time     Waiting",   "Time     Turn-Around Time") 
     total_wt = 0
     total_tat = 0
     for i in range(n): 
         total_wt = total_wt + wt[i]  
-        total_tat = total_tat + tat[i]   
-	return(total_wt /n)
-  # return (total_tat / n)  
-    
-    
+        total_tat = total_tat + tat[i]  
+        print(" ", processes[i][0], "\t\t",  processes[i][1], "\t\t",  wt[i], "\t\t", tat[i]) 
+    print("\nAverage waiting time = %.6f "%(total_wt /n) ) 
+    print("Average turn around time = ", (total_tat) / n)  
+  
+
+
 if __name__ =="__main__":
     
     proc = [[1,10], [2,4], [3, 2], [4, 8]] 
