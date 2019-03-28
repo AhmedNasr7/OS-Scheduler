@@ -1,4 +1,3 @@
-
 from PyQt5.uic import loadUiType
 import sys
 from os import path
@@ -84,7 +83,7 @@ class MainApp(QMainWindow):
         self.chart.resize(900, 600)
         self.chart.setVisible(0)
 
-        p = [[3, 4], [0, 8], [1, 11], [2, 15], [3, 18], [0, 19], [2, 23], [2, 25]]
+        #p = [[3, 4], [0, 8], [1, 11], [2, 15], [3, 18], [0, 19], [2, 23], [2, 25]]
 
         #self.chart.plot(p)
 
@@ -222,23 +221,32 @@ class MainApp(QMainWindow):
         # run the corresponding algo
         if (str(self.algorithmsMenu.currentText()) == "  First Come First Serve"):
             self.proc_Gantt, self.waiting_time = FCFS(np.array(self.processes))
+            self.chart.set_arrivalTime(self.processes[0][2])
         
         elif (str(self.algorithmsMenu.currentText()) == '  Priority'):
+
+            self.chart.set_arrivalTime(self.processes[0][3])
+
             
-            if self.preemptiveCheckBox.isChecked:
+            if self.preemptiveCheckBox.isChecked():
                 self.proc_Gantt, self.waiting_time = Priority(np.array(self.processes), True)
-            else:
+            elif self.nonPreemptiveCheckBox.isChecked():
                 self.proc_Gantt, self.waiting_time = Priority(np.array(self.processes), False)
 
         
         elif (str(self.algorithmsMenu.currentText()) == "  Shortest Job First"):
 
-            if self.preemptiveCheckBox.isChecked:
+            self.chart.set_arrivalTime(self.processes[0][2])
+
+
+            if self.preemptiveCheckBox.isChecked():
                 self.proc_Gantt, self.waiting_time = SJF(np.array(self.processes), True)
             else:
                 self.proc_Gantt, self.waiting_time = SJF(np.array(self.processes), False)
         
         elif (str(self.algorithmsMenu.currentText()) == "  Round Robin"):
+            self.chart.set_arrivalTime(self.processes[0][2])
+
             q = self.QtimeEdit.text()
             self.proc_Gantt, self.waiting_time = RoundRobin(np.array(self.processes), int(q))
         

@@ -28,6 +28,7 @@ class PlotCanvas(FigureCanvas):
         self.pNames = []
         self.start = []
         self.end = []
+        self.arrival_time = 0
 
        
 
@@ -54,7 +55,7 @@ class PlotCanvas(FigureCanvas):
 
         self.y_ticks_labels = []
         self.pNums = []
-        self.start = [0]
+        self.start = [self.arrival_time]
         
         for l in processes:
             self.y_ticks_labels.append('Process ' + str(l[0]))
@@ -65,6 +66,9 @@ class PlotCanvas(FigureCanvas):
         self.start.pop()
 
      
+    def set_arrivalTime(self, t):
+        self.arrival_time = t
+
 
         
 
