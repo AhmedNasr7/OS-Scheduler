@@ -1,6 +1,4 @@
 
-
-
 from PyQt5.uic import loadUiType
 import sys
 from os import path
