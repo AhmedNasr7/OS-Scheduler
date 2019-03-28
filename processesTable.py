@@ -30,6 +30,7 @@ class Table(QMainWindow):
         self.setup_Ui(priority)
         self.init_Button()
         self.processes = []
+        self.priority_flag = priority
     
        
 
@@ -101,6 +102,7 @@ class Table(QMainWindow):
 
     def onClick_okay(self):
         self.parse_tableData()
+        print(self.processes)
         if len(self.processes) > 0:
             self.procAdded.emit()
             self.close()
@@ -109,13 +111,19 @@ class Table(QMainWindow):
 
     def parse_tableData(self):
         
-        # to be edited
         for i in range(self.rows_count):
             try: 
-                burst = int(self.table.takeItem(i, 1).text())
-                arrival = int(self.table.takeItem(i, 2).text())
-                process = [i, burst, arrival]
-                self.processes.append(process)
+                if self.priority_flag == False:
+                    burst = int(self.table.takeItem(i, 1).text())
+                    arrival = int(self.table.takeItem(i, 2).text())
+                    process = [i, burst, arrival]
+                    self.processes.append(process)
+                else:
+                    burst = int(self.table.takeItem(i, 1).text())
+                    prior =  int(self.table.takeItem(i, 3).text())
+                    arrival = int(self.table.takeItem(i, 2).text())
+                    process = [i, burst, prior,  arrival]
+                    self.processes.append(process)
             except Exception as e:
                 pass
 

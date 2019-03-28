@@ -13,6 +13,8 @@ from processesTable import *
 from chart import *
 from scheduler import *
 
+import numpy as np
+
 #Ui_MainWindow,_ = loadUiType(path.join(path.dirname(__file__), "main.ui"))
 
 
@@ -27,6 +29,8 @@ class MainApp(QMainWindow):
         self.setup_Ui()
         self.init_Buttons()
         self.proc_Gantt = []
+        self.waiting_time = 0
+        
 
 
         
@@ -142,12 +146,20 @@ class MainApp(QMainWindow):
 
         try:
 
-            if (algo == '  Priority' or algo == "  Shortest Job First"): #  showing preemptive/Non Preemptive checkboxes.
+            if (algo == '  Priority'): #  showing preemptive/Non Preemptive checkboxes.
                self.preemptiveCheckBox.setVisible(True)
                self.nonPreemptiveCheckBox.setVisible(True)
                self.priorityPicked = True
                self.QtimeEdit.setVisible(0)
                self.QtimeLabel.setVisible(0)
+            elif algo == "  Shortest Job First":
+                
+                self.preemptiveCheckBox.setVisible(True)
+                self.nonPreemptiveCheckBox.setVisible(True)
+                self.priorityPicked = False
+                self.QtimeEdit.setVisible(0)
+                self.QtimeLabel.setVisible(0)
+
 
             else:
                 self.preemptiveCheckBox.setVisible(False)
@@ -206,26 +218,26 @@ class MainApp(QMainWindow):
 
         # run the corresponding algo
         if (str(self.algorithmsMenu.currentText()) == "  First Come First Serve"):
-            self.proc_Gantt, self.waiting_time = FCFS(self.processes)
+            self.proc_Gantt, self.waiting_time = FCFS(np.array(self.processes))
         
         elif (str(self.algorithmsMenu.currentText()) == '  Priority'):
             
             if self.preemptiveCheckBox.isChecked:
-                self.proc_Gantt, self.waiting_time = Priority(self.processes, True)
+                self.proc_Gantt, self.waiting_time = Priority(np.array(self.processes), True)
             else:
-                self.proc_Gantt, self.waiting_time = Priority(self.processes, False)
+                self.proc_Gantt, self.waiting_time = Priority(np.array(self.processes), False)
 
         
         elif (str(self.algorithmsMenu.currentText()) == "  Shortest Job First"):
 
             if self.preemptiveCheckBox.isChecked:
-                self.proc_Gantt, self.waiting_time = SJF(self.processes, True)
+                self.proc_Gantt, self.waiting_time = SJF(np.array(self.processes), True)
             else:
-                self.proc_Gantt, self.waiting_time = SJF(self.processes, False)
+                self.proc_Gantt, self.waiting_time = SJF(np.array(self.processes), False)
         
         elif (str(self.algorithmsMenu.currentText()) == "  Round Robin"):
             q = self.QtimeEdit.text()
-            self.proc_Gantt, self.waiting_time = roundRobin(self.processes, int(q))
+            self.proc_Gantt, self.waiting_time = roundRobin(np.array(self.processes), int(q))
         
         else: 
             pass
@@ -233,6 +245,8 @@ class MainApp(QMainWindow):
         
         self.chart.plot(self.proc_Gantt)
         self.chart.setVisible(1)
+        self.waitingTimeLabel.setVisible(1)
+        self.waitingTimeLabel.setText("Average Waiting Time: " + str(self.waiting_time))
 
     
 
