@@ -237,7 +237,7 @@ class MainApp(QMainWindow):
         
         elif (str(self.algorithmsMenu.currentText()) == "  Round Robin"):
             q = self.QtimeEdit.text()
-            self.proc_Gantt, self.waiting_time = roundRobin(np.array(self.processes), int(q))
+            self.proc_Gantt, self.waiting_time = RoundRobin(np.array(self.processes), int(q))
         
         else: 
             pass
@@ -249,16 +249,6 @@ class MainApp(QMainWindow):
         self.waitingTimeLabel.setText("Average Waiting Time: " + str(self.waiting_time))
 
     
-
-        
-
-        
-       
-        
-
-
-
-
 
 
 def main():
