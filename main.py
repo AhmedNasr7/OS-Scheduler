@@ -147,6 +147,8 @@ class MainApp(QMainWindow):
 
         try:
 
+            self.waitingTimeLabel.setVisible(0)
+            self.processed = []
             if (algo == '  Priority'): #  showing preemptive/Non Preemptive checkboxes.
                self.preemptiveCheckBox.setVisible(True)
                self.nonPreemptiveCheckBox.setVisible(True)
