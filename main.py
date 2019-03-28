@@ -61,8 +61,8 @@ class MainApp(QMainWindow):
         self.runBtn.setEnabled(0)
 
         self.waitingTimeLabel = QLabel('Waiting Time: ', self)
-        self.waitingTimeLabel.move(450, 70)
-        self.waitingTimeLabel.resize(150, 40)
+        self.waitingTimeLabel.move(400, 70)
+        self.waitingTimeLabel.resize(200, 40)
         self.waitingTimeLabel.setVisible(0)
 
         self.algorithmsMenuLabel = QLabel('Choose Algorithm', self)
@@ -238,7 +238,7 @@ class MainApp(QMainWindow):
         
         elif (str(self.algorithmsMenu.currentText()) == "  Round Robin"):
             q = self.QtimeEdit.text()
-            self.proc_Gantt, self.waiting_time = roundRobin(np.array(self.processes), int(q))
+            self.proc_Gantt, self.waiting_time = RoundRobin(np.array(self.processes), int(q))
         
         else: 
             pass
@@ -246,8 +246,13 @@ class MainApp(QMainWindow):
         
         self.chart.plot(self.proc_Gantt)
         self.chart.setVisible(1)
-        self.waitingTimeLabel.setVisible(1)
+        print("wait time = ", self.waiting_time)
         self.waitingTimeLabel.setText("Average Waiting Time: " + str(self.waiting_time))
+        self.waitingTimeLabel.setVisible(1)
+        self.preemptiveCheckBox.setVisible(0)
+        self.nonPreemptiveCheckBox.setVisible(0)
+        self.QtimeEdit.setVisible(0)
+        self.QtimeLabel.setVisible(0)
 
     
 
