@@ -1,5 +1,15 @@
 import numpy as np
 
+# Calculate Turn around time and substract from it the burst time
+def AvgWaitingTime(Processes, OrderedProcesses):
+
+    AvgWaitingTime = 0
+    NumOfProcesses = Processes.shape[0] 
+    for i in range(NumOfProcesses):
+        AvgWaitingTime += OrderedProcesses[i,1] - Processes[i,3]
+    
+    return AvgWaitingTime
+
 def FCFS(Processes):
     Processes = np.insert(Processes, 2, Processes[:,2], axis=1)
     return Priority(Processes, False)
@@ -134,27 +144,35 @@ def RoundRobin(Processes, q):
 
     Processes = Processes[Processes[:,2].argsort()]
     Time = Processes[0,2]
+    AvgWaitingTime = sum(Processes[:,1]) / q
+    
+    i = 0
+    while(True):
 
-
-    for process in Processes:
-        AvgWaitingTime += float(Time - Processes[0,2]) / NumOfProcesses
-        NumOfiterations = int(process[1]/q)
-        RemainderTime = process[1] % q
-        for i in range(NumOfiterations):
+        if(Processes[i,1] > q):
+            Processes[i,1] -= q
             Time += q
-            OrderedProcesses.append([process[0], Time])
-        if(RemainderTime):
-            Time += RemainderTime
-            OrderedProcesses.append([process[0], Time])
+            OrderedProcesses.append([Processes[i,0], Time])
+
         else:
-            continue
+            Time += Processes[i,1]
+            OrderedProcesses.append([Processes[i,0], Time])
+            Processes = np.delete(Processes,i,0)
+            i -= 1
+            
+
+        if(Processes.shape[0] == 0):
+            break
+        
+        i = (i + 1) % (Processes.shape[0])
 
     return OrderedProcesses, AvgWaitingTime
 
 
+
 def main():
     #print(FCFS(np.array([1,5,1,2,5,0,3,5,0]).reshape(-1,3)))
-    processes = [[0, 1, 0], [1, 6, 3], [2, 3, 20], [7, 0, 10]]
+    processes = [[0, 6, 0], [1, 5, 0], [2, 8, 0]]
     print(RoundRobin(np.array(processes), 4))
     # print(Priority(np.array([1,5,1,0,2,5,1,2,3,5,1,3,4,4,1,4,5,5,0,20]).reshape(-1,4), True))
     
