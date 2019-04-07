@@ -148,11 +148,6 @@ def RoundRobin(Processes, q):
     
     i = 0
     while(True):
-<<<<<<< HEAD
-
-=======
-        
->>>>>>> c1ea5bb47ee80b1bbd3e5354d0365b5d8c718acc
         if(Processes[i,1] > q):
             Processes[i,1] -= q
             Time += q
@@ -162,10 +157,7 @@ def RoundRobin(Processes, q):
             Time += Processes[i,1]
             OrderedProcesses.append([Processes[i,0], Time])
             Processes = np.delete(Processes,i,0)
-<<<<<<< HEAD
             i -= 1
-=======
->>>>>>> c1ea5bb47ee80b1bbd3e5354d0365b5d8c718acc
             
 
         if(Processes.shape[0] == 0):
@@ -179,11 +171,7 @@ def RoundRobin(Processes, q):
 
 def main():
     #print(FCFS(np.array([1,5,1,2,5,0,3,5,0]).reshape(-1,3)))
-<<<<<<< HEAD
     processes = [[0, 6, 0], [1, 5, 0], [2, 8, 0]]
-=======
-    processes = [[1, 1, 0], [2, 6, 0], [3, 3, 0], [4, 20, 0]]
->>>>>>> c1ea5bb47ee80b1bbd3e5354d0365b5d8c718acc
     print(RoundRobin(np.array(processes), 4))
     # print(Priority(np.array([1,5,1,0,2,5,1,2,3,5,1,3,4,4,1,4,5,5,0,20]).reshape(-1,4), True))
     
